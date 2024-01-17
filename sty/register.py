@@ -3,7 +3,7 @@ These are the default registers that sty provides out of the box.
 """
 from sty import renderfunc
 from sty.primitive import Register, Style
-from sty.rendertype import EightbitBg, EightbitFg, RgbBg, RgbFg, Sgr
+from sty.rendertype import Eightbit, Rgb, Sgr, SgrArgs
 
 
 class EfRegister(Register):
@@ -56,11 +56,11 @@ class FgRegister(Register):
         super().__init__()
 
         self.renderfuncs[Sgr] = renderfunc.sgr
-        self.renderfuncs[EightbitFg] = renderfunc.eightbit_fg
-        self.renderfuncs[RgbFg] = renderfunc.rgb_fg
+        self.renderfuncs[Eightbit] = renderfunc.eightbit_fg
+        self.renderfuncs[Rgb] = renderfunc.rgb_fg
 
-        self.set_eightbit_call(EightbitFg)
-        self.set_rgb_call(RgbFg)
+        self.set_eightbit_call(Eightbit)
+        self.set_rgb_call(Rgb)
 
         # Classic terminal foreground color preset.
         # These are well supported.
@@ -86,14 +86,14 @@ class FgRegister(Register):
         self.white = Style(Sgr(97))
 
         # These are least supported.
-        self.da_black = Style(EightbitFg(0))
-        self.da_red = Style(EightbitFg(88))
-        self.da_green = Style(EightbitFg(22))
-        self.da_yellow = Style(EightbitFg(58))
-        self.da_blue = Style(EightbitFg(18))
-        self.da_magenta = Style(EightbitFg(89))
-        self.da_cyan = Style(EightbitFg(23))
-        self.grey = Style(EightbitFg(249))
+        self.da_black = Style(Eightbit(0))
+        self.da_red = Style(Eightbit(88))
+        self.da_green = Style(Eightbit(22))
+        self.da_yellow = Style(Eightbit(58))
+        self.da_blue = Style(Eightbit(18))
+        self.da_magenta = Style(Eightbit(89))
+        self.da_cyan = Style(Eightbit(23))
+        self.grey = Style(Eightbit(249))
 
 
 class BgRegister(Register):
@@ -112,11 +112,11 @@ class BgRegister(Register):
         super().__init__()
 
         self.renderfuncs[Sgr] = renderfunc.sgr
-        self.renderfuncs[EightbitBg] = renderfunc.eightbit_bg
-        self.renderfuncs[RgbBg] = renderfunc.rgb_bg
+        self.renderfuncs[Eightbit] = renderfunc.eightbit_bg
+        self.renderfuncs[Rgb] = renderfunc.rgb_bg
 
-        self.set_eightbit_call(EightbitBg)
-        self.set_rgb_call(RgbBg)
+        self.set_eightbit_call(Eightbit)
+        self.set_rgb_call(Rgb)
 
         # Classic terminal background color preset.
         # These are well supported.
@@ -142,14 +142,80 @@ class BgRegister(Register):
         self.white = Style(Sgr(107))
 
         # These are least supported.
-        self.da_black = Style(EightbitBg(0))
-        self.da_red = Style(EightbitBg(88))
-        self.da_green = Style(EightbitBg(22))
-        self.da_yellow = Style(EightbitBg(58))
-        self.da_blue = Style(EightbitBg(18))
-        self.da_magenta = Style(EightbitBg(89))
-        self.da_cyan = Style(EightbitBg(23))
-        self.grey = Style(EightbitBg(249))
+        self.da_black = Style(Eightbit(0))
+        self.da_red = Style(Eightbit(88))
+        self.da_green = Style(Eightbit(22))
+        self.da_yellow = Style(Eightbit(58))
+        self.da_blue = Style(Eightbit(18))
+        self.da_magenta = Style(Eightbit(89))
+        self.da_cyan = Style(Eightbit(23))
+        self.grey = Style(Eightbit(249))
+
+
+class UnderlineRegister(Register):
+    """
+    The default 'underline register'.
+
+    Instances from this class can be used to create text with colored underlines.
+
+    For example:
+
+        print(f"{ul.red}{ul.on}Red Underline{ul.rs}")
+        print(f"{ul.green}{ul.on}Green Underline{ul.rs}")
+    """
+
+    def __init__(self):
+        super().__init__()
+
+        self.renderfuncs[Sgr] = renderfunc.sgr
+        self.renderfuncs[SgrArgs] = renderfunc.sgr_args
+        self.renderfuncs[Eightbit] = renderfunc.eightbit_underline
+        self.renderfuncs[Rgb] = renderfunc.rgb_underline
+
+        self.set_eightbit_call(Eightbit)
+        self.set_rgb_call(Rgb)
+
+        self.on = Style(Sgr(4))
+        self.off = Style(Sgr(24))
+        self.line = Style(Sgr(4))
+        self.double = Style(SgrArgs(4, 2))
+        self.curly = Style(SgrArgs(4, 3))
+        self.dotted = Style(SgrArgs(4, 4))
+        self.dashed = Style(SgrArgs(4, 5))
+
+        # Classic terminal background color preset.
+        # These are well supported.
+        self.black = Style(Eightbit(0))
+        self.red = Style(Eightbit(1))
+        self.green = Style(Eightbit(2))
+        self.yellow = Style(Eightbit(3))
+        self.blue = Style(Eightbit(4))
+        self.magenta = Style(Eightbit(5))
+        self.cyan = Style(Eightbit(6))
+        self.li_grey = Style(Eightbit(7))
+
+        self.rs = Style(Sgr(59), Sgr(24))
+        self.default = Style(Sgr(59))
+
+        # These are less supported.
+        self.da_grey = Style(Eightbit(8))
+        self.li_red = Style(Eightbit(9))
+        self.li_green = Style(Eightbit(10))
+        self.li_yellow = Style(Eightbit(11))
+        self.li_blue = Style(Eightbit(12))
+        self.li_magenta = Style(Eightbit(13))
+        self.li_cyan = Style(Eightbit(14))
+        self.white = Style(Eightbit(15))
+
+        # These are least supported.
+        self.da_black = Style(Eightbit(0))
+        self.da_red = Style(Eightbit(88))
+        self.da_green = Style(Eightbit(22))
+        self.da_yellow = Style(Eightbit(58))
+        self.da_blue = Style(Eightbit(18))
+        self.da_magenta = Style(Eightbit(89))
+        self.da_cyan = Style(Eightbit(23))
+        self.grey = Style(Eightbit(249))
 
 
 class RsRegister(Register):
@@ -193,3 +259,4 @@ ef = EfRegister()
 fg = FgRegister()
 bg = BgRegister()
 rs = RsRegister()
+ul = UnderlineRegister()

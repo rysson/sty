@@ -13,11 +13,27 @@ def sgr(num: int) -> str:
     return "\033[" + str(num) + "m"
 
 
+def sgr_args(*num: int) -> str:
+    """
+    Create a extended SGR escape sequence.
+    """
+    if not num:
+        raise TypeError("Need at least one argument")
+    return "\033[" + ":".join(map(str, num)) + "m"
+
+
 def eightbit_fg(num: int) -> str:
     """
     Create a 8bit (256-color) foreground escape sequence.
     """
     return "\033[38;5;" + str(num) + "m"
+
+
+def eightbit_underline(num: int) -> str:
+    """
+    Create a 8bit (256-color) underline escape sequence.
+    """
+    return "\033[58;5;" + str(num) + "m"
 
 
 def eightbit_bg(num: int) -> str:
@@ -39,3 +55,10 @@ def rgb_bg(r: int, g: int, b: int) -> str:
     Create a 24bit (true color) background escape sequence.
     """
     return "\x1b[48;2;" + str(r) + ";" + str(g) + ";" + str(b) + "m"
+
+
+def rgb_underline(r: int, g: int, b: int) -> str:
+    """
+    Create a 24bit (true color) underline escape sequence.
+    """
+    return "\x1b[58;2;" + str(r) + ";" + str(g) + ";" + str(b) + "m"

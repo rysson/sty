@@ -43,9 +43,11 @@ from sty.register import BgRegister as BgRegister
 from sty.register import EfRegister as EfRegister
 from sty.register import FgRegister as FgRegister
 from sty.register import RsRegister as RsRegister
+from sty.register import UnderlineRegister as UnderlineRegister
 from sty.register import bg as bg
 from sty.register import ef as ef
 from sty.register import fg as fg
 from sty.register import rs as rs
+from sty.register import ul as ul
 
 from sty.rendertype import *
